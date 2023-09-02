@@ -1,0 +1,44 @@
+config system system
+	option hostname	'TAU-8'
+
+config access access
+  option http_port '80'
+  option https_port '443'
+  option telnet_port '23'
+  option ssh_port '22'
+  option ftp_port '21'
+
+config ftp ftp
+	option password user
+	option adm_password	'ryodtery'
+
+config wifi wifi
+        option mcast_bitrate 	54000
+        option enable 		0
+        option replicate 	1
+        option retry_count 	20
+        option auth_enable 	0
+        option auth_algs 	3
+
+config iptv iptv
+        option enable 0
+        option port 1234
+        
+config printserver printserver
+        option enable 0
+        
+config tr069 tr069
+        option enable 0
+
+config "provision" "provision"   
+	option provision_mode	'cfg_only'
+        option priority 'dhcp'
+        option cfg_file_name 'tftp://update.local/tau8.cfg'
+        option fw_file_name 'tftp://update.local/tau8.fw'
+	option cfg_update_interval	'0'
+        option fw_update_interval '86400'
+        option ftp_username ''
+        option ftp_password ''
+        option http_username ''
+        option http_password ''
+

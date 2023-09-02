@@ -1,0 +1,23 @@
+# Copyright (C) 2006 OpenWrt.org
+
+config interface loopback
+	option ifname	lo
+	option status	1
+	option ipaddr	::1
+	option netmask	128
+
+config interface lan
+	option ifname	wlan0
+	option status6	1
+	option ipaddr6	fec0::ef01
+	option netmask6	120
+	option ipaddr6_new	fec0::ef01
+	option netmask6_new	120
+
+config interface wan
+	option ifname	eth0
+	option status6	1
+	option ipaddr6	fec0::ee01
+	option netmask6	120
+	option ipaddr6_new	fec0::ee01
+	option netmask6_new	120

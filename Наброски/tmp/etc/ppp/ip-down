@@ -1,0 +1,33 @@
+#!/bin/sh
+
+echo "PPP connection closed" > /dev/console
+echo "RUN: .$0 '$1' '$2' '$3' '$4' '$5' '$6'" > /dev/console
+
+
+INTERNET_SERVICE_IFACE=`grep "INTERNET_SERVICE_IFACE"  /tmp/net_variables | cut -d"=" -f2`
+
+echo "INTERNET_SERVICE_IFACE=$INTERNET_SERVICE_IFACE" > /dev/console
+
+if [ "$INTERNET_SERVICE_IFACE" == "ppp0" ] ; then 
+    echo "Service 'Internet'" > /dev/console
+    /sbin/ledctl red green
+fi
+
+
+[ -z "$6" ] || env -i ACTION="ifdown" INTERFACE="$6" DEVICE="$1" PROTO=ppp /sbin/hotplug-call "iface"
+
+[ -f /tmp/.need_reset_usb_modem ] && {
+    /sbin/reset_modem
+}
+
+[ -d /etc/ppp/ip-down.d ] && {
+	for SCRIPT in /etc/ppp/ip-down.d/*
+	do
+		[ -x "$SCRIPT" ] && "$SCRIPT" $@
+	done
+}
+
+
+echo "$0 done." > /dev/console
+
+exit 0

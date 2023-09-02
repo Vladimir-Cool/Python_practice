@@ -1,0 +1,209 @@
+#!/bin/sh
+
+echo "PPP connection established" > /dev/console
+echo "RUN: .$0 '$1' '$2' '$3' '$4' '$5' '$6'" > /dev/console
+
+. /usr/sbin/functions.sh
+
+
+equal()
+{
+    case "$1" in
+	"$2") return 0 ;;
+        *) return 255 ;;
+    esac
+}
+
+nequal()
+{
+    case "$1" in
+	"$2") return 255 ;;
+        *) return 0 ;;
+    esac
+}
+
+add_reserve_dns()
+{
+    RESERVE_DNS=`grep "RESERVE_DNS" /tmp/net_variables`
+    if [ -n "$RESERVE_DNS" ]; then
+    sed -i "/^RESERVE_DNS*/d" /tmp/net_variables
+    fi
+
+    if [ -n "$1" ]; then
+        echo "RESERVE_DNS=$1" >> /tmp/net_variables
+    fi
+}
+
+
+dns.add $DNS1 $DNS2
+
+IFACE=$1
+DEFGW=$5
+IPPARAM=$6
+
+def_gw_enable="no"
+chan=""
+def_gw_apply="no"
+
+usb_modem_mode=`grep "USB_MODEM_MODE" /tmp/net_variables | cut -d"=" -f2`
+preferred_chan=`grep "PREFERRED_CHANNEL" /tmp/net_variables | cut -d"=" -f2`
+ping_servers=`grep "PING_SERVERS" /tmp/net_variables | cut -d"=" -f2`
+INTERNET_SERVICE_IFACE=`grep "INTERNET_SERVICE_IFACE"  /tmp/net_variables | cut -d"=" -f2`
+
+add_def_gw="route add default dev $IFACE"
+del_def_gw="route delete default"
+
+IS_L2TP="0"
+
+VPN_PROTOCOL=`grep "VPN_PROTOCOL"  /tmp/net_variables | cut -d"=" -f2`
+PPTP_SERVER_IP=`grep "PPTP_SERVER_IP"  /tmp/net_variables | cut -d"=" -f2`
+
+if [ "$VPN_PROTOCOL" == "L2TP" ] && [ "$PPTP_SERVER_IP" == "$IPPARAM" ]; then
+    IS_L2TP="1"
+fi
+
+
+if [ "$IPPARAM" == "pppoe" ] ; then
+
+    chan="wired"
+
+    PPPOE_GETDEF_GW=`grep "PPPOE_GETDEF_GW" /tmp/net_variables | cut -d"=" -f2`
+
+    if [ "$PPPOE_GETDEF_GW" == "1" ] || [ "$PPPOE_GETDEF_GW" == "enable" ] ; then
+	def_gw_enable="yes"
+	if [ "$usb_modem_mode" != "reserve" ] ; then
+	    def_gw_apply="yes"
+	fi
+    fi
+    
+elif [ "$IPPARAM" == "pptp" ] || [ "$IS_L2TP" == "1" ] ; then
+
+    chan="wired"
+
+    PPTP_GETDEF_GW=`grep "PPTP_GETDEF_GW" /tmp/net_variables | cut -d"=" -f2`
+
+    if [ "$PPTP_GETDEF_GW" == "1" ] || [ "$PPTP_GETDEF_GW" == "enable" ] ; then
+	def_gw_enable="yes"
+	if [ "$usb_modem_mode" != "reserve" ] ; then
+	    def_gw_apply="yes"
+	fi
+    fi
+elif [ "$IPPARAM" == "3G" ] ; then
+
+    chan="wireless"
+
+    #echo $PPID > /tmp/pid/pppd.3G.pid
+
+    /sbin/ledctl green
+
+    USB_MODEM_GETDEF_GW=`grep "USB_MODEM_GETDEF_GW" /tmp/net_variables | cut -d"=" -f2`
+
+    if [ "$USB_MODEM_GETDEF_GW" == "1" ] || [ "$USB_MODEM_GETDEF_GW" == "enable" ] ; then
+	def_gw_enable="yes"
+	if [ "$usb_modem_mode" != "reserve" ] ; then
+	    def_gw_apply="yes"
+	fi
+    fi
+
+fi
+
+#####
+
+enable_check_for_reserve="no"
+
+if [ "$chan" == "wired" ] && [ "$INTERNET_SERVICE_IFACE" == "ppp0" ] ; then
+	enable_check_for_reserve="yes"
+fi
+
+if [ "$chan" == "wireless" ] ; then
+	enable_check_for_reserve="yes"
+fi
+
+echo "Script is running for Internet service or 3G: $enable_check_for_reserve" > /dev/console
+
+if [ "$usb_modem_mode" == "reserve" ] && [ "$enable_check_for_reserve" == "yes" ] ; then
+  if [ "$def_gw_enable" == "yes" ] && [ "$DEFGW" != "" ] ; then
+    if [ "$preferred_chan" == "$chan" ] ; then
+	dns_routes=""
+	dns=${DNS1}" "${DNS2}
+	[ -n "$dns" ] && {
+		for j in $dns ; do
+			/usr/sbin/interface_monitor check auto $j
+			if [ "$?" != "0" ] && [ "`/bin/check_route $j`" == "" ] ; then
+				echo "DNS-server $j is unreachable, adding route to it." > /dev/console
+				/sbin/route add -host $j gw $DEFGW
+				dns_routes=${dns_routes}" "${j}
+			else
+				echo "There is an access to DNS-server $j. No adding route." > /dev/console
+			fi
+		done
+	}
+         
+	echo "Addig routes to ping servers..." > /dev/console
+	echo "Ping-servers: $ping_servers" > /dev/console
+	for i in $ping_servers ; do
+	    cmd="route delete -host $i"
+	    echo $cmd > /dev/console
+	    $cmd;$cmd;$cmd
+	    cmd="route add -host $i gw $DEFGW"
+	    echo $cmd > /dev/console
+	    $cmd
+	done
+        
+	echo "Checking access to ping servers..." > /dev/console
+
+	/usr/sbin/interface_monitor check $IFACE $ping_servers && { 
+	    echo "Connection OK" > /dev/console
+	    def_gw_apply="yes"
+	}
+	
+	echo "Deleting routes to DNS-servers..." > /dev/console
+	[ -n "$dns_routes" ] && {
+		for j in $dns_routes ; do
+			/sbin/route del -host $j gw $DEFGW
+		done
+	}
+    else
+        def_gw_apply="yes"
+    fi
+  fi
+fi
+
+if [ "$preferred_chan" != "$chan" ]; then
+    dns=${DNS1}" "${DNS2}
+    add_reserve_dns $dns
+fi
+
+#####
+
+if [ "$usb_modem_mode" == "reserve" ] && [ "$enable_check_for_reserve" == "yes" ] ; then
+  if [ "$def_gw_enable" == "yes" ] && [ "$DEFGW" != "" ] ; then
+    if [ "$preferred_chan" == "$chan" ] ; then
+	echo "$DEFGW" > /tmp/gw
+    fi
+  fi
+fi
+
+#####
+
+if [ "$def_gw_apply" == "yes" ] ; then
+    $del_def_gw;$del_def_gw;$del_def_gw
+    echo "Add default GW $DEFGW" > /dev/console
+    $add_def_gw                         
+fi
+
+#####
+
+
+INTERNET_SERVICE_IFACE=`grep "INTERNET_SERVICE_IFACE" /tmp/net_variables | cut -d"=" -f2`
+
+echo "INTERNET_SERVICE_IFACE=$INTERNET_SERVICE_IFACE" > /dev/console
+
+if [ "$INTERNET_SERVICE_IFACE" == "ppp0" ] ; then 
+    echo "Service 'Internet'" > /dev/console
+    /sbin/ledctl green
+fi
+
+echo "$0 done." > /dev/console
+
+exit 0

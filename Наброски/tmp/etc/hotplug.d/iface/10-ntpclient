@@ -1,0 +1,31 @@
+#!/bin/sh
+# Copyright (C) 2006 OpenWrt.org
+
+. /usr/sbin/functions.sh
+
+config_cb() {
+	local cfg="$CONFIG_SECTION"
+	local cfgtype
+	config_get cfgtype "$cfg" TYPE
+
+	case "$cfgtype" in
+		ntp_client)
+			config_get hostname	$cfg hostname
+			config_get port		$cfg port
+			
+#		ps x | grep 'bin/[n]tpclient' >&- || {
+#				route -n 2>&- | grep '^0.0.0.0' >&- && {
+#					/usr/sbin/ntpclient -h $hostname -p ${port:-123} 2>&- >&-
+#				}
+#		}
+		;;
+	esac
+}
+case "${ACTION:-ifup}" in
+	ifup)
+		config_load ntp_client&
+	;;
+	ifdown)
+		route -n 2>&- | grep '^0.0.0.0' >&- || killall ntpclient 2>&- >&-
+	;;
+esac

@@ -1,0 +1,12 @@
+rootfs / rootfs rw 0 0
+/dev/root / jffs2 ro,relatime 0 0
+/dev/ram2 /mnt ramfs rw,relatime 0 0
+none /proc proc rw,relatime 0 0
+none /sys sysfs rw,relatime 0 0
+none /tmp tmpfs rw,nosuid,nodev,relatime,size=123584k 0 0
+tmpfs /dev tmpfs rw,relatime,size=512k 0 0
+none /dev/pts devpts rw,relatime,mode=600 0 0
+/dev/ram0 /tmp ramfs rw,relatime 0 0
+/dev/ram1 /etc ramfs rw,relatime 0 0
+none /proc/bus/usb usbfs rw,relatime 0 0
+debugfs /sys/kernel/debug debugfs rw,relatime 0 0

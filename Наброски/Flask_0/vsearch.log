@@ -1,0 +1,11 @@
+ImmutableMultiDict([('phrase', 'ћишки воришки'), ('letters', 'аеоиу€юы')])|127.0.0.1|Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0|{'и', 'о'}
+ImmutableMultiDict([('phrase', 'ћишки воришки'), ('letters', 'аеоиу€юы')])|127.0.0.1|Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0|{'и', 'о'}
+ImmutableMultiDict([('phrase', 'пппппппппппппппппп'), ('letters', 'аеоиу€юы')])|127.0.0.1|Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0|set()
+ImmutableMultiDict([('phrase', 'мишки воришки'), ('letters', 'аеоиу€юы')])|127.0.0.1|Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0|{'и', 'о'}
+ImmutableMultiDict([('phrase', 'керамика'), ('letters', 'аеоиу€юы')])|127.0.0.1|Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0|{'а', 'е', 'и'}
+None
+<Request 'http://127.0.0.1:5000/search4' [POST]>
+Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0
+Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0
+Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0 <class 'werkzeug.user_agent.UserAgent'>
+Mozilla/5.0

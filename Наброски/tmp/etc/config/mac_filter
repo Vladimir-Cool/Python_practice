@@ -1,0 +1,4 @@
+
+config "filter" "general"
+	option filter_mode 'disabled'
+	option rules_count '0'

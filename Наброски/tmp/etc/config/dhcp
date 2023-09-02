@@ -1,0 +1,4 @@
+config "dhcp" "lan"
+        option start    '192.168.1.10'
+        option limit    '50'
+        option lease    '720m'

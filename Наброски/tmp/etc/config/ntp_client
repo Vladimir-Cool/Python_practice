@@ -1,0 +1,7 @@
+
+config "ntp_client" "ntp"
+	option enable	'1'
+	option hostname	'172.30.252.3'
+
+
+

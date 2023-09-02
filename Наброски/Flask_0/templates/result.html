@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<h2>{{ the_title }}</h2>
+
+<p>Вы указали следующие данные:</p>
+<table>
+    <tr><td>Фраза:</td><td>{{ the_phrase }}</td></tr>
+    <tr><td>Буквы:</td><td> {{ the_letters }} </td></tr>
+</table>
+
+<p>В фразе "{{ the_phrase }}" найдены буквы из "{{ the_letters }}", результат ниже</p>
+<h3>{{ the_results }}</h3>
+{% endblock %}

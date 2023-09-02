@@ -1,0 +1,4 @@
+
+config "firewall" "general"
+	option security_level   'no'
+	option rules_count      '0'

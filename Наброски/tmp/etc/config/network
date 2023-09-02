@@ -1,0 +1,42 @@
+
+config 'common_settings' 'common_settings'
+	option '1stdns' '192.168.0.1'
+	option 'run_localdns' '1'
+	option 'run_igmpproxy' '0'
+	option 'default_gw' '192.168.1.1'
+	option 'network_mode' 'advanced'
+	option 'wan_speedduplex' 'Auto'
+	option reply_timeout	'3'
+	option retry_count	'3'
+	option cycle_timeout	'5'
+
+config 'service' 'service0'
+	option 'service_name' 'Internet'
+	option 'wan_type' 'Untagged'
+	option 'connection' 'wired'
+	option 'wan_protocol' 'DHCP'
+	option 'get_gw' '1'
+	option 'get_dns' '1'
+	option 'wan_ip' '192.168.1.2'
+	option 'wan_netmask' '255.255.255.0'
+	option 'pppoe_user' 'user'
+	option 'pppoe_mtu' '1500'
+	option 'web_from_wan' '1'
+	option 'webhttps_from_wan' '0'
+	option telnet_from_wan	'0'
+	option ftp_from_wan	'0'
+	option 'ssh_from_wan' '1'
+	option use_vendor_info	'0'
+	option 'vendor_info' 'VOIP-Eltex-TAU-8.IP'
+	option 'pppoe_psw_encrypted' '7A6C7575736B7565'
+	option mtu	'1500'
+	option snmp_from_wan	'0'
+
+
+
+
+
+
+
+
+

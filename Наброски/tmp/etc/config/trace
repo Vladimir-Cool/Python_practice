@@ -1,0 +1,28 @@
+config config igmp
+    option enable 0
+    option mode   syslog
+
+config config pbx
+	option enable	'1'
+    option mode syslog
+	option error	'1'
+	option warning	'1'
+	option debug	'1'
+	option info	'1'
+	option sip_level	'4'
+
+config config tr069
+    option enable 0
+    option tracedirect 7
+    option tracelevel 15
+
+config "config" "general"
+	option trace_output	'disable'
+
+
+
+config "config" "syslogd"
+	option port	'514'
+	option file	'/var/log/qw'
+	option size	'1000'
+

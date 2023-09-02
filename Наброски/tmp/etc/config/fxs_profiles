@@ -1,0 +1,32 @@
+
+# fxs profiles
+
+config "common_settings" "common_settings"
+        option profiles_count 	'1'
+
+config "profile" "profile0"
+        option profile_name     'Default'
+	option minonhooktime	'900'
+        option gainr 		'-70'
+        option gaint 		'0'
+        option calltransfer 	'0'
+        option callwaiting 	'0'
+        option hotline 		'0'
+        option hottimeout 		'5'
+	option stop_dial	'1'
+        option ct_busy 		'0'
+        option ct_noanswer 	'0'
+	option minflash	'100'
+        option minpulse 	'100'
+        option interdigit 	'200'
+	option caller_id	'bell'
+	option payphone	'off'
+	option agc_spk_enable	'0'
+	option agc_mic_enable	'0'
+
+
+
+
+
+
+

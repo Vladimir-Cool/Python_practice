@@ -1,0 +1,4 @@
+/dev/ttyUSB0
+#460800
+921600
+file /etc/ppp/options.3G.megafon

@@ -1,0 +1,112 @@
+
+
+config "config" "sip"
+	option profile_name	'SIP profile 0'
+	option enablesip	'1'
+	option rsrv_mode	'homing'
+	option domain_to_reg	'1'
+	option outbound	'1'
+	option expires	'1800'
+	option rri	'300'
+	option early_media	'0'
+	option display_to_reg	'0'
+	option ringback	'0'
+	option use_alertinfo_header	'0'
+	option reduce_sdp_media_count	'0'
+	option ruri_check_user_only	'0'
+	option option_100rel	'off'
+	option timer_enable	'1'
+	option timer_minse	'120'
+	option timer_session_expires	'1800'
+	option keep_alive_mode	'off'
+	option conference_mode	'local'
+	option conference_server	'conf'
+	option ims_mode	'off'
+	option xcap_callhold_name	'call-hold'
+	option xcap_cw_name	'call-waiting'
+	option xcap_conference_name	'three-party-conference'
+	option xcap_hotline_name	'hot-line-service'
+	option xcap_calltransfer_name	'explicit-call-transfer'
+	option proxyip	'irk.voice.dsi.ru'
+	option domain	'irk.voice.dsi.ru'
+	option registration	'1'
+	option registrarip	'irk.voice.dsi.ru'
+	option registration_rsrv1	'0'
+	option registration_rsrv2	'0'
+	option registration_rsrv3	'0'
+	option registration_rsrv4	'0'
+	option rsrv_check_method	'options'
+	option rsrv_keepalive_time	'360'
+
+
+
+
+
+
+
+
+
+
+
+
+
+config "config" "codecs"
+	option g711a	'0'
+	option g711u	'1'
+	option g729a	'-1'
+	option g729b	'-1'
+	option g729x	'2'
+	option g723	'-1'
+	option g711pte	'20'
+	option g729pte	'20'
+	option g723pte	'30'
+	option dtmftransfer	'rfc2833'
+	option dtmf_mime	'dtmf-relay'
+	option faxdirection	'0'
+	option flashtransfer	'info'
+	option flash_mime	'broadsoft'
+	option modem	'2'
+	option payload	'101'
+	option rfc3264_pt_common	'0'
+	option silencedetector	'0'
+	option echocanceler	'1'
+	option rtcp	'0'
+	option pt_auto_adjustment	'0'
+	option jb_vo_adaptive	'1'
+	option jb_vo_del_mode_soft	'1'
+	option jb_pt_delay	'0'
+	option jb_vo_delay_min	'0'
+	option jb_vo_delay_max	'200'
+	option jb_vo_del_threshold	'500'
+	option dispersion_time	'32'
+	option faxtransfer1	'2'
+	option faxtransfer2	'1'
+	option faxtransfer3	'0'
+	option enable_in_t38	'1'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+config "dialplan" "type"
+	option dialplan_type	'regexp'
+
+
+
+config "dialplan" "regexp"
+	option expression	'S5, L10 (*xx|#xx|0[1-49]|0[05-8]x|112|[1-79]xxxxx|810x.|81x|8[25]x.|8xxxxxxxxxx)'
+

@@ -1,0 +1,4 @@
+config "timezone" "timezone"
+	option zoneinfo	'Asia/Irkutsk (Irkutsk)'
+        option dst_enable       '0'
+
